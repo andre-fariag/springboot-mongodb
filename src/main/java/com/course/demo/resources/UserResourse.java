@@ -41,7 +41,7 @@ public class UserResourse {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Void> insert(@RequestBody UserDTO objDTO){
+    public ResponseEntity<Void> insert(@RequestBody UserDTO objDTO) {
         User obj = service.fromDTO(objDTO); // converts UserDTO to User
         obj = service.insert(obj);
         // uri creates a header that contains the data of the insertion
@@ -51,11 +51,18 @@ public class UserResourse {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> delete(@PathVariable String id){
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
 
     }
 
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Void> update(@RequestBody UserDTO objDTO, @PathVariable String id) {
+        User obj = service.fromDTO(objDTO); // converts UserDTO to User
+        obj.setId(id); // updates de id number to the id given as argument
+        obj = service.update(obj);
+        return ResponseEntity.noContent().build();
+    }
 
 }
