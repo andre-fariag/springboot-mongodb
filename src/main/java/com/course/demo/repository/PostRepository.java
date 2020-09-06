@@ -1,5 +1,6 @@
 package com.course.demo.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import com.course.demo.domain.Post;
@@ -11,9 +12,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostRepository extends MongoRepository<Post, String> {
 
+    // OBS: sintax for referencing a paramater inside the query string = ?"the position of the parameter"
+
     @Query("{ 'title': { $regex: ?0, $options: 'i' } }")
     List<Post> searchTitle(String text);
 
     List<Post> findByTitleContainingIgnoreCase(String text);
+
+    @Query("{ $and: [ {date: {$gte: ?1} }, {date: { $lte: ?2}} , {$or: [ { 'title': { $regex: ?0, $options: 'i' } }, { 'body': { $regex: ?0, $options: 'i' } }, { 'comments.text': { $regex: ?0, $options: 'i' } } ]} ] }")
+    List<Post> fullSearch(String text, Date dateMin, Date dateMax);
 
 }

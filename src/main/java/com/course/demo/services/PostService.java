@@ -1,5 +1,6 @@
 package com.course.demo.services;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,5 +24,11 @@ public class PostService {
 
   public List<Post> findByTitle(String text) {
     return repo.searchTitle(text);
+  }
+
+  public List<Post> fullSearch(String text, Date dateMin, Date dateMax) {
+    dateMax = new Date(dateMax.getTime() + 24 * 60 * 60 * 100); // finishes the search at the end of the day instead of
+                                                                // the beginnig
+    return repo.fullSearch(text, dateMin, dateMax);
   }
 }
